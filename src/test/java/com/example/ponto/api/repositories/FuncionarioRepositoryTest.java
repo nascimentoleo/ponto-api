@@ -90,7 +90,7 @@ public class FuncionarioRepositoryTest {
     private Empresa obterDadosEmpresa() {
         Empresa empresa = new Empresa();
         empresa.setRazaoSocial("Empresa teste");
-        empresa.setCnpj("51463645000100");
+        empresa.setCnpj("`");
         return empresa;
     }
 }
