@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 import java.util.Optional;
 
 @Service
-class EmpresaServiceImpl implements EmpresaService {
+public class EmpresaServiceImpl implements EmpresaService {
 
     private static final Logger log = LoggerFactory.getLogger(EmpresaServiceImpl.class);
     @Autowired
