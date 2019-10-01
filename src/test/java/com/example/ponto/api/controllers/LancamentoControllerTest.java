@@ -99,7 +99,9 @@ public class LancamentoControllerTest {
   }
 
   @Test
-  @WithMockUser
+  @WithMockUser(
+      username = "admin@admin.com",
+      roles = {"ADMIN"})
   public void testRemoverLancamento() throws Exception {
     given(lancamentoService.buscarPorId(anyLong())).willReturn(Optional.of(new Lancamento()));
 
