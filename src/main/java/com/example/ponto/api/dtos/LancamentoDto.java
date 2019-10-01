@@ -1,21 +1,20 @@
 package com.example.ponto.api.dtos;
 
 import javax.validation.constraints.NotEmpty;
-import java.util.Optional;
 
 public class LancamentoDto {
-  private Optional<Long> id = Optional.empty();
+  private Long id;
   private String data;
   private String tipo;
   private String descricao;
   private String localizacao;
   private Long funcionarioId;
 
-  public Optional<Long> getId() {
+  public Long getId() {
     return id;
   }
 
-  public void setId(final Optional<Long> id) {
+  public void setId(final Long id) {
     this.id = id;
   }
 
@@ -62,13 +61,23 @@ public class LancamentoDto {
 
   @Override
   public String toString() {
-    return "LancamentoDto{" +
-            "id=" + id +
-            ", data='" + data + '\'' +
-            ", tipo='" + tipo + '\'' +
-            ", descricao='" + descricao + '\'' +
-            ", localizacao='" + localizacao + '\'' +
-            ", funcionarioId=" + funcionarioId +
-            '}';
+    return "LancamentoDto{"
+        + "id="
+        + id
+        + ", data='"
+        + data
+        + '\''
+        + ", tipo='"
+        + tipo
+        + '\''
+        + ", descricao='"
+        + descricao
+        + '\''
+        + ", localizacao='"
+        + localizacao
+        + '\''
+        + ", funcionarioId="
+        + funcionarioId
+        + '}';
   }
 }

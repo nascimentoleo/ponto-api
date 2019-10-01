@@ -15,6 +15,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -49,7 +50,7 @@ public class LancamentoController {
 
   public LancamentoController() {}
 
-  @GetMapping("/{funcionarioId}")
+  @GetMapping("/funcionario/{funcionarioId}")
   public ResponseEntity<Response<Page<LancamentoDto>>> listaPorFuncionarioId(
       @PathVariable("funcionarioId") final Long funcionarioId,
       @RequestParam(value = "pag", defaultValue = "0") final int pag,
@@ -58,7 +59,7 @@ public class LancamentoController {
     log.info("Buscando lancamentos por Id do funcionario: {}, página {}", funcionarioId, pag);
     final Response<Page<LancamentoDto>> response = new Response<>();
     final PageRequest pageRequest =
-        PageRequest.of(pag, this.qtdPorPagina, Sort.Direction.valueOf(dir));
+        PageRequest.of(pag, this.qtdPorPagina, Sort.Direction.valueOf(dir), ord);
     final Page<Lancamento> lancamentos =
         lancamentoService.buscarPorFuncionarioId(funcionarioId, pageRequest);
     final Page<LancamentoDto> lancamentoDtos = lancamentos.map(this::converterLancamentoDto);
@@ -82,7 +83,7 @@ public class LancamentoController {
 
   @PostMapping
   public ResponseEntity<Response<LancamentoDto>> adicionar(
-      @RequestBody final LancamentoDto lancamentoDto, final BindingResult result)
+      @Valid @RequestBody final LancamentoDto lancamentoDto, final BindingResult result)
       throws ParseException {
     log.info("Adicionando lancamento: {}", lancamentoDto);
     final Response<LancamentoDto> response = new Response<>();
@@ -107,7 +108,7 @@ public class LancamentoController {
     log.info("Atualizando lancamento: {}", lancamentoDto);
     final Response<LancamentoDto> response = new Response<>();
     this.validarFuncionario(lancamentoDto, result);
-    lancamentoDto.setId(Optional.of(id));
+    lancamentoDto.setId(id);
     final Lancamento lancamento = this.converterDtoParaLancamento(lancamentoDto, result);
 
     if (result.hasErrors()) {
@@ -120,6 +121,7 @@ public class LancamentoController {
   }
 
   @DeleteMapping("/{id}")
+  @PreAuthorize("hasAnyRole('ADMIN')")
   public ResponseEntity<Response<String>> remover(@PathVariable("id") final Long id) {
     log.info("Removendo lancamento: {}", id);
     final Response<String> response = new Response<>();
@@ -165,7 +167,7 @@ public class LancamentoController {
 
   private LancamentoDto converterLancamentoDto(final Lancamento lancamento) {
     final LancamentoDto lancamentoDto = new LancamentoDto();
-    lancamentoDto.setId(Optional.of(lancamento.getId()));
+    lancamentoDto.setId(lancamento.getId());
     lancamentoDto.setData(dateFormat.format(lancamento.getData()));
     lancamentoDto.setTipo(lancamento.getTipo().toString());
     lancamentoDto.setDescricao(lancamento.getDescricao());
