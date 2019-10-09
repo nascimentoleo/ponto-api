@@ -35,6 +35,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             "/auth/**",
             "/api/cadastrar-pj",
             "/api/cadastrar-pf",
+            "/api/lancamentos",
             "/v2/api-docs",
             "/swagger-resources/**",
             "/configuration/security",
